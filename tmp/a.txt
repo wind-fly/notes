@@ -1,0 +1,15 @@
+{"url":"/ds/kafka","requestTime":"2018-09-11 10:05:15","reqType":"POST","path":"Start","params":null,"body":{"intervalCron":"55 * * * * ? *","sourceType":"kafka","dataSetName":"wind006_datasetname","execCronExp":"0 0 16 * * ? *","collectOffSet":"fromBeginning","description":"kafkatest","dataSetId":9279771125388898,"outTopicName":"fly101","groupId":"wind006_group","version":">0.10.0","fields":{},"topicName":"wind006","nodeList":["192.168.32.43:9092","192.168.32.44:9092","192.168.32.45:9092"],"execQuartzExp":"0 0 16 * * ? *","appId":117062273149521,"datasourceName":"scy_kafka_queue","intervalFireNow":true},"meta":{},"result":null}
+
+
+{"url":"/ds/kafka","requestTime":"2018-09-11 10:05:15","reqType":"POST","path":"Delete","params":null,"body":{"intervalCron":"55 * * * * ? *","sourceType":"kafka","dataSetName":"wind_datasetname","execCronExp":"0 0 16 * * ? *","collectOffSet":"fromBeginning","description":"kafkatest","dataSetId":917911125388898,"outTopicName":"fly101","groupId":"wind005_group","version":">0.10.0","fields":{},"topicName":"wind005","nodeList":["192.168.32.43:9092","192.168.32.44:9092","192.168.32.45:9092"],"execQuartzExp":"0 0 16 * * ? *","appId":117063573149521,"datasourceName":"scy_kafka队列","intervalFireNow":false},"meta":{},"result":null}
+
+
+{"url":"/ds/jdbc","requestTime":"2018-09-11 21:37:10","reqType":"POST","path":"Conn","params":null,"body":{"isEncrypt":true,"sourceType":"mysql","serverPort":"3306","dbName":"xxl-job","serverHost":"192.168.31.230","datasourceName":"MySQL-192.168.31.230","userName":"root","password":"LqXBzsK1jpH5xC/OsD46DA==","instanceName":null},"meta":{"path":"akka.tcp://itoa@127.0.0.1:2551/user/$e#-615795699","udid":"15e44013-2b7d-4ca3-8c7a-4a2716c7bcca","operation":"conn","rt_topic":"ITOA_TO_HUB_RSP","token":"b7ed992e-2fa2-4e12-ba56-c75be7ce1b1c","category":"StartJdbcConnect","timeout":5000},"result":null}
+
+
+
+bin/kafka-console-producer.sh --broker-list 192.168.32.43:9092,192.168.32.44:9092,192.168.32.45:9092 --topic ITOA_TO_HUB_REQ
+bin/kafka-console-producer.sh --broker-list 192.168.32.43:9092,192.168.32.44:9092,192.168.32.45:9092 --topic wind006
+
+bin/kafka-console-consumer.sh --bootstrap-server 192.168.32.43:9092,192.168.32.44:9092,192.168.32.45:9092  --topic fly101 --from-beginning
+bin/kafka-console-consumer.sh --bootstrap-server 192.168.32.43:9092,192.168.32.44:9092,192.168.32.45:9092  --topic ITOA_TO_HUB_RSP
