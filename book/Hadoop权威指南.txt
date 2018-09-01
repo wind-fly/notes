@@ -1,0 +1,68 @@
+1 Bit = Binary Digit
+8 Bits = 1 Byte
+1024 Bytes = 1 Kilobyte
+1024 Kilobytes = 1 Megabyte
+1024 Megabytes = 1 Gigabyte
+1024 Gigabytes = 1 Terabyte
+1024 Terabytes = 1 Petabyte
+1024 Petabytes = 1 Exabyte
+1024 Exabytes = 1 Zettabyte
+1024 Zettabytes = 1 Yottabyte
+1024 Yottabytes = 1 Brontobyte
+1024 Brontobytes = 1 Geopbyte
+
+MapReduce(HDFS) 适合一次写入、多次读出的情景，关系型数据库更适合持续更新的数据集
+
+MapReduce尽量在计算节点上存储数据（数据本地化），以实现数据的本地快速访问。数据本地化特征是MapReduce的核心特征。
+
+Hadoop起源于网络搜索引擎Apache Nutch
+
+在工业界，Hadoop早已成为公认的大数据通用存储和分析平台
+
+Hadoop2.x特性：
+1.在yarn上面运行
+2.HDFS联邦管理
+3.HDFS的高可用性,避免namenode的单点故障
+
+MapReduce是一种可用于数据处理的编程模型，MapReduce程序本质上是并行运行的，因此可以将大规模的数据分析任务分发给一个拥有足够多机器的数据中心
+MapReduce的优势是在于处理大规模数据集
+
+map，reduce阶段的每个输入输出都是Key，Value键值对
+map阶段：对于文本文件来说，key是某一行数据起始位置相对于文本起始位置的偏移量，value是这一行的文本数据
+
+job
+
+task：map_task, reduce_task
+jobtracker, tasktracker
+
+Hadoop为每一个切片(split)构建一个map task，并由这个map task执行用户自定义的mapper方法处理切片中的每一条记录
+
+最佳分片大小应该与blocksize一致，因为它可以保证存储在单个节点上最大输入块的大小
+
+为什么map task将中间结果写入到本地磁盘而不是HDFS？中间结果写入HDFS保证高可用，小题大做。中间结果被reduce使用完就可以删除。
+
+如果一个map task在将该task产生的中间结果传送给reduce taks之前失败，那么会在另外一个节点上启动相同的map task重新
+
+
+// 执行一下命令将列出文件系统中各个文件由哪些块构成
+hadoop fsck / -files -blocks
+
+namenode 持久化的2个文件：命名空间镜像文件和编辑日志文件
+
+namenode的高可用：
+第一种方式：备份那些组成文件系统元数据持久状态的文件，hadoop可以通过配置使namenode在多个文件系统上保存元数据的持久状态
+这些写操作是实时同步的，是原子操作。一般配置是，将持久化状态写入本地磁盘的同时，写入一个远程挂载的网络文件系统(NFS)
+
+第二种方式：运行一个辅助namenode，但它不能被用作namenode，这个辅助namenode的重要作用是定期通过编辑日志合并命名空间镜像，
+以防止编辑日志过大。这个辅助namenode一般在另外一台单独的物理计算机上运行，因为它需要占用大量的cpu时间与namenode相同容量
+的内存来执行合并操作。它会保存合并后的命名空间镜像的副本，并在namenode发生故障时启用。但是，辅助namenode保存的状态总是
+滞后于主节点，所以在主节点全部失效时，难免回丢失部分数据。在这种状态下，一般把存储在NFS上的namenode元数据复制到辅助namenode
+并作为新的主namenode运行
+
+hadoop fs -help
+
+//访问本地文件系统
+hadoop fs -ls file:///
+
+
+
